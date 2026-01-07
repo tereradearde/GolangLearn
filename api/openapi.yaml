@@ -1,0 +1,252 @@
+openapi: 3.0.3
+info:
+  title: LearnGo API
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /api/auth/register:
+    post:
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200': { description: OK }
+  /api/auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+  /api/courses:
+    get:
+      summary: List courses
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create course
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                description: { type: string }
+      responses:
+        '201': { description: Created }
+        '403': { description: Forbidden }
+  /api/courses/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: Get course
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update course
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                description: { type: string }
+      responses:
+        '200': { description: OK }
+        '403': { description: Forbidden }
+    delete:
+      summary: Delete course
+      security:
+        - bearerAuth: []
+      responses:
+        '204': { description: No Content }
+        '403': { description: Forbidden }
+  /api/courses/{id}/lessons:
+    get:
+      summary: List lessons by course
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create lesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                content: { type: string }
+                order: { type: integer }
+      responses:
+        '201': { description: Created }
+        '403': { description: Forbidden }
+  /api/lesson/{id}:
+    get:
+      summary: Get lesson
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update lesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                content: { type: string }
+                order: { type: integer }
+      responses:
+        '200': { description: OK }
+        '403': { description: Forbidden }
+    delete:
+      summary: Delete lesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No Content }
+        '403': { description: Forbidden }
+  /api/lessons/{id}/assignments:
+    get:
+      summary: List assignments by lesson
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create assignment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                prompt: { type: string }
+                starterCode: { type: string }
+                tests: { type: string }
+                order: { type: integer }
+      responses:
+        '201': { description: Created }
+        '403': { description: Forbidden }
+  /api/assignments/{id}:
+    put:
+      summary: Update assignment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                prompt: { type: string }
+                starterCode: { type: string }
+                tests: { type: string }
+                order: { type: integer }
+      responses:
+        '200': { description: OK }
+        '403': { description: Forbidden }
+    delete:
+      summary: Delete assignment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No Content }
+        '403': { description: Forbidden }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

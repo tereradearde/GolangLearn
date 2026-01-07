@@ -1,0 +1,29 @@
+# Go
+bin/
+build/
+dist/
+coverage/
+*.test
+*.out
+
+# Node
+node_modules/
+.next/
+out/
+.turbo/
+
+# Editors/OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Docker
+.docker/
+docker-data/
+
